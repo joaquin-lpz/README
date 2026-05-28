@@ -37,3 +37,22 @@ Generar un script en Bash que:
 ## Formato de salida
 Proporciona el script dentro de un único bloque de código Bash con comentarios claros explicativos, seguido de una lista de 3 pasos rápidos para programarlo en el `cron`.
 ```
+## 🟢RESPUESTA DE GEMINI
+```markdown
+#!/bin/bash
+# Backup Script - ASIR
+BACKUP_DIR="/backup"
+FECHA=$(date +%Y-%m-%d)
+DESTINO="$BACKUP_DIR/$FECHA"
+
+mkdir -p "$DESTINO"
+
+# 1. Backup de archivos web
+tar -czf "$DESTINO/web_backup.tar.gz" /var/www/html
+
+# 2. Backup de Base de Datos
+mysqldump -u root -p prod_db > "$DESTINO/db_backup.sql"
+
+# 3. Limpieza de backups antiguos (más de 7 días)
+find "$BACKUP_DIR" -type d -mtime +7 -exec rm -rf {} \;
+```
