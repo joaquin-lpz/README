@@ -56,3 +56,25 @@ mysqldump -u root -p prod_db > "$DESTINO/db_backup.sql"
 # 3. Limpieza de backups antiguos (más de 7 días)
 find "$BACKUP_DIR" -type d -mtime +7 -exec rm -rf {} \;
 ```
+## 🟢RESPUESTA CHATGPT
+```markdown
+#!/bin/bash
+# --- CONFIGURACIÓN ---
+BACKUP_PATH="/backup"
+NOW=$(date +"%Y-%m-%d")
+TARGET_DIR="$BACKUP_PATH/$NOW"
+WEB_DIR="/var/www/html"
+DB_NAME="prod_db"
+
+# Crear directorio si no existe
+mkdir -p "$TARGET_DIR"
+
+# [Paso 1] Comprimir directorio web
+tar -czf "$TARGET_DIR/web_$NOW.tar.gz" "$WEB_DIR" 2>/dev/null
+
+# [Paso 2] Dump de MySQL
+mysqldump --single-transaction "$DB_NAME" > "$TARGET_DIR/db_$NOW.sql"
+
+# [Paso 3] Retención de 7 días
+find "$BACKUP_PATH" -mindepth 1 -maxdepth 1 -type d -mtime +7 -exec rm -rf {} \;
+```
